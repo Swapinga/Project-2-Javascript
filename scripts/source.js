@@ -6,7 +6,10 @@ let dadosplayer = 0;
 let winrate = 0;
 let cantidadPartidas = 0;
 let partidasGanadas = 0;
-let partidasPerdidas = 0;   
+let partidasPerdidas = 0; 
+const apiKey = 'f89164e54575ba090d40ae6de53f3dd2';
+const city = 'Buenos Aires';
+const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;  
 const registro = [];
 let recuperarDatos = localStorage.getItem("partida")
 if (recuperarDatos !== null) {
@@ -165,6 +168,23 @@ function actualizartabla1(newData) {
     Tabla1.data.datasets[0].data = [partidasGanadas, partidasPerdidas];
     Tabla1.update();
 }
+fetch(apiUrl)
+    .then(response => response.json())
+    .then(dataapi => {
+        console.log(dataapi);
+
+        const descripcionclima = dataapi.weather[0].description;
+        const temperatura = dataapi.main.temp;
+        const humedad = dataapi.main.humidity;
+
+        document.getElementById('descripcionclima').textContent = descripcionclima;
+        document.getElementById('temperatura').textContent = `${temperatura}°C`;
+        document.getElementById('humedad').textContent = `Humedad: ${humedad}%`;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
     actualizartabla1([partidasGanadas, partidasPerdidas]);
     estadisticas();
     stats();
