@@ -25,16 +25,25 @@ function blackjack() {
             dadosplayer += dados;
             document.getElementById("resultadobox").innerHTML = "Tiraste " + dadosplayer + " dados y sumaste " + sumatotal + " puntos";
         }
-        else if (sumadealer === 0){alert("El numero de dados debe ser mayor a 0")}
-        if (sumatotal > 21 && sumadealer === 0){
-            alert("Te pasaste de 21! El dealer gana")
-            registro.push([0,sumatotal,sumadealer])
+        else if (sumadealer === 0){
+            Swal.fire({
+            title: 'Error',
+            text: "El numero de dados debe ser mayor a 0",
+            confirmButtonText: 'OK',
+        });}
+        if (sumatotal > 21 && sumadealer === 0) {
+            Swal.fire({
+                title: 'Derrota',
+                text: "Te pasaste de 21! El dealer gana",
+                confirmButtonText: 'OK',
+            });
+            registro.push([0, sumatotal, sumadealer]);
             document.getElementById("botonreset").hidden = false;
             document.getElementById("botonstats").hidden = false;
             localStorage.setItem("partida", JSON.stringify(registro));
-            estadisticas()
+            estadisticas();
         }
-    })
+    });
 }
 
 
@@ -58,13 +67,25 @@ function dealer() {
     function mostrarResultadoDealer() {
         document.getElementById("resultadodealer").innerHTML = "El dealer tiro " + dadosdealer + " dados y sumo " + sumadealer + " puntos";
         if (sumadealer > 21) {
-            alert("El dealer se pasó de 21. ¡Ganaste!");
+            Swal.fire({
+                title: 'Victoria',
+                text: "El dealer se pasó de 21. ¡Ganaste!",
+                confirmButtonText: 'OK',
+            })
             registro.push([1,sumatotal,sumadealer])
         } else if (sumadealer >= sumatotal) {
-            alert("Tu puntaje: " + sumatotal + ". El dealer sacó: " + sumadealer + ". El dealer gana");
+            Swal.fire({
+                title: 'Derrota',
+                text: "Tu puntaje: " + sumatotal + ". El dealer sacó: " + sumadealer + ". El dealer gana",
+                confirmButtonText: 'OK',
+            })
             registro.push([0,sumatotal,sumadealer])
         } else {
-            alert("Tu puntaje: " + sumatotal + ". El dealer sacó: " + sumadealer + ". ¡Ganaste!");
+            Swal.fire({
+                title: 'Victoria',
+                text: "Tu puntaje: " + sumatotal + ". El dealer sacó: " + sumadealer + ". ¡Ganaste!",
+                confirmButtonText: 'OK',
+            })
             registro.push([1,sumatotal,sumadealer])
         }
         document.getElementById("botonreset").hidden = false;
@@ -80,13 +101,18 @@ partidasGanadas = registro.reduce((sum, innerArray) => {
 partidasPerdidas = cantidadPartidas - partidasGanadas;
 winrate = parseInt((partidasGanadas / partidasPerdidas) * 100)
 document.getElementById("partidaN").innerHTML = "Esta es la partida #" + cantidadPartidas;
+actualizartabla1([partidasGanadas, partidasPerdidas]);
 };
 
 
     
 function stats() {
     document.querySelector("#botonstats").addEventListener("click", function () {
-        alert("Partidas jugadas: " + cantidadPartidas + " Victorias: " + partidasGanadas + " Derrotas " + partidasPerdidas + " %Victoria " + winrate + "%")
+        Swal.fire({
+            title: 'Estadisticas',
+            text: "Partidas jugadas: " + cantidadPartidas + " Victorias: " + partidasGanadas + " Derrotas " + partidasPerdidas + " Winrate " + winrate + "%",
+            confirmButtonText: 'OK',
+        })
     })
     };
 
@@ -100,16 +126,46 @@ function reset() {
     dadosdealer = 0;
     dadosplayer = 0;
     currentSum = 0;
-    console.log(registro); //el registro de todas las partidas jugadas sin recargar la pagina
+    console.log(registro); //el registro de todas las partidas jugadas que luego se guarda en el navegador
     document.getElementById("resultadodealer").innerHTML ="";
     document.getElementById("resultadobox").innerHTML ="";
     document.querySelector('#botonquedarse').disabled = false;
     document.querySelector('#botontirar').disabled = false;
     document.getElementById("botonreset").hidden = true;
 })}
+let Tabla1;
+
+function creartabla1() {
+    const ctx = document.getElementById('gameStatsChart').getContext('2d');
+
+    const labels = ['Victorias', 'Derrotas'];
+    const data = [partidasGanadas, partidasPerdidas];
+
+    Tabla1 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Estadisticas',
+                data: data,
+                backgroundColor: ['green', 'red'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+        }
+    });
+}
+creartabla1();
 
 
-
+function actualizartabla1(newData) {
+    Tabla1.data.datasets[0].data = [partidasGanadas, partidasPerdidas];
+    Tabla1.update();
+}
+    actualizartabla1([partidasGanadas, partidasPerdidas]);
     estadisticas();
     stats();
     reset();

@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8">
     <title>21 BLACKJACK</title>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
   </head>
   <body>
  <h1>Proba tu suerte en blackjack con dados</h1>
@@ -26,9 +29,10 @@
   <p id="partidaN"></p>
 </div>
 <div>
-  <input type="button" id="botonstats" value="Estadisticas" hidden> 
+  <input type="button" id="botonstats" value="Estadisticas" hidden>
+  <canvas id="gameStatsChart"></canvas> 
 </div>
-   <script src="./scripts/source.js">
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="./scripts/source.js"></script>
   </body>
 </html>
