@@ -174,7 +174,7 @@ fetch(apiUrl)
         console.log(dataapi);
 
         const descripcionclima = dataapi.weather[0].description;
-        const temperatura = dataapi.main.temp;
+        const temperatura = parseInt(dataapi.main.temp - 273.15); //conversion de kelvin a celsius
         const humedad = dataapi.main.humidity;
 
         document.getElementById('descripcionclima').textContent = descripcionclima;
