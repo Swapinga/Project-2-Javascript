@@ -9,7 +9,7 @@ let partidasGanadas = 0;
 let partidasPerdidas = 0; 
 const apiKey = 'f89164e54575ba090d40ae6de53f3dd2';
 const city = 'Buenos Aires';
-const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;  
+const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=es&appid=${apiKey}`;  
 const registro = [];
 let recuperarDatos = localStorage.getItem("partida")
 if (recuperarDatos !== null) {
